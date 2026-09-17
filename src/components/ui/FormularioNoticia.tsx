@@ -9,6 +9,7 @@ export function FormularioNoticia() {
   const [titulo, setTitulo] = useState("");
   const [texto, setTexto] = useState("");
   const [importante, setImportante] = useState(false);
+  const [foto, setFoto] = useState<File | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,10 +25,29 @@ export function FormularioNoticia() {
       data: { user },
     } = await supabase.auth.getUser();
 
+    let foto_url: string | null = null;
+
+    if (foto) {
+      const ruta = `avisos/${Date.now()}-${foto.name}`;
+      const { error: errorSubida } = await supabase.storage
+        .from("adjuntos")
+        .upload(ruta, foto);
+
+      if (errorSubida) {
+        setEnviando(false);
+        setError("No se pudo subir la foto. Intenta nuevamente.");
+        return;
+      }
+
+      const { data: publica } = supabase.storage.from("adjuntos").getPublicUrl(ruta);
+      foto_url = publica.publicUrl;
+    }
+
     const { error } = await supabase.from("avisos").insert({
       titulo,
       texto,
       importancia: importante ? "alta" : "normal",
+      foto_url,
       usuario_id: user?.id ?? null,
     });
 
@@ -41,6 +61,7 @@ export function FormularioNoticia() {
     setTitulo("");
     setTexto("");
     setImportante(false);
+    setFoto(null);
     setAbierto(false);
     router.refresh();
   }
@@ -75,6 +96,18 @@ export function FormularioNoticia() {
         rows={4}
         className="rounded-xl border border-arena-300 bg-white px-3 py-2 text-sm text-bosque-900 outline-none focus:border-bosque-500"
       />
+
+      <label className="flex flex-col gap-1 text-sm text-bosque-700">
+        Foto (opcional) — útil para avisos obvios de mostrar
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
+          className="text-xs text-bosque-500 file:mr-3 file:rounded-full file:border-0 file:bg-bosque-500 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-arena-100"
+        />
+      </label>
+
       <label className="flex items-center gap-2 text-sm text-bosque-700">
         <input
           type="checkbox"

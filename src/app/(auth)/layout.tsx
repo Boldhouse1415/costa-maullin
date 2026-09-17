@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             width={2069}
             height={760}
             priority
-            className="h-auto w-full max-w-[280px]"
+            className="h-auto w-full max-w-[420px]"
           />
         </div>
         <div className="tarjeta p-6 shadow-xl">{children}</div>

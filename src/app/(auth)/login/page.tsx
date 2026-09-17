@@ -12,15 +12,6 @@ export default function PaginaLogin() {
 
   const supabase = crearClienteNavegador();
 
-  async function continuarConGoogle() {
-    setError(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) setError(error.message);
-  }
-
   async function iniciarSesionConEmail(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -37,19 +28,6 @@ export default function PaginaLogin() {
   return (
     <div className="flex flex-col gap-5">
       <h2 className="text-center text-lg font-medium text-bosque-900">Ingresar</h2>
-
-      <button
-        onClick={continuarConGoogle}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-arena-300 bg-white font-medium text-bosque-900 transition hover:bg-arena-200"
-      >
-        Continuar con Google
-      </button>
-
-      <div className="flex items-center gap-3 text-xs text-bosque-500">
-        <div className="h-px flex-1 bg-arena-300" />
-        o con tu correo
-        <div className="h-px flex-1 bg-arena-300" />
-      </div>
 
       <form onSubmit={iniciarSesionConEmail} className="flex flex-col gap-3">
         <input

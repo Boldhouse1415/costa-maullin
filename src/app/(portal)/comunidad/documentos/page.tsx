@@ -9,13 +9,16 @@ export default async function PaginaDocumentos() {
 
   const supabase = await crearClienteServidor();
 
-  const [{ data: documentos }, { data: categorias }] = await Promise.all([
+  const [{ data: documentos }, categoriasData] = await Promise.all([
     supabase
       .from("documentos")
       .select("id, nombre, descripcion, fecha, archivo_url, categorias_documento(nombre)")
       .order("fecha", { ascending: false }),
-    supabase.from("categorias_documento").select("id, nombre").order("nombre"),
+    puedeGestionar
+      ? supabase.from("categorias_documento").select("id, nombre").order("nombre")
+      : Promise.resolve({ data: [] as { id: string; nombre: string }[] }),
   ]);
+  const categorias = categoriasData.data;
 
   return (
     <div className="flex flex-col gap-4 px-5 py-8">

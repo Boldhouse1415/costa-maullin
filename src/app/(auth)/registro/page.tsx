@@ -80,12 +80,13 @@ export default function PaginaRegistro() {
         </button>
       </form>
 
-      <p className="text-center text-sm text-bosque-500">
-        ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="underline">
-          Ingresa aquí
-        </Link>
-      </p>
+      <p className="text-center text-sm text-bosque-500">¿Ya tienes cuenta?</p>
+      <Link
+        href="/login"
+        className="rounded-full bg-arena-200 py-2.5 text-center text-sm font-medium text-bosque-900 transition hover:bg-arena-300"
+      >
+        Ingresa aquí
+      </Link>
     </div>
   );
 }

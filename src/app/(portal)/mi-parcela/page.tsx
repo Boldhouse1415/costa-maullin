@@ -106,7 +106,7 @@ export default async function PaginaMiParcela() {
 
           <a
             href={`/comunidad/parcelas/${p.numero}`}
-            className="text-center text-sm font-medium text-bosque-700 underline"
+            className="flex items-center justify-center rounded-full bg-bosque-500 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
           >
             Ver en el mapa de la comunidad
           </a>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import { SelectorArchivo } from "./SelectorArchivo";
 
 export function FormularioDocumento({
   categorias,
@@ -110,11 +111,9 @@ export function FormularioDocumento({
         rows={2}
         className="rounded-xl border border-arena-300 bg-white px-3 py-2 text-sm text-bosque-900 outline-none focus:border-bosque-500"
       />
-      <input
-        type="file"
-        required
-        onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
-        className="text-xs text-bosque-500 file:mr-3 file:rounded-full file:border-0 file:bg-bosque-500 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-arena-100"
+      <SelectorArchivo
+        label="Elegir archivo"
+        onChange={(archivos) => setArchivo(archivos?.[0] ?? null)}
       />
 
       {error && <p className="text-sm text-rojo-semaforo">{error}</p>}

@@ -27,17 +27,18 @@ export async function obtenerUsuarioActual(): Promise<UsuarioActual | null> {
 
   if (!user) return null;
 
-  const { data: usuario } = await supabase
-    .from("usuarios")
-    .select("id, email, roles(nombre, rol_permiso(permisos(clave)))")
-    .eq("id", user.id)
-    .single();
-
-  const { data: perfil } = await supabase
-    .from("perfiles")
-    .select("nombre, apellidos, foto_url")
-    .eq("usuario_id", user.id)
-    .maybeSingle();
+  const [{ data: usuario }, { data: perfil }] = await Promise.all([
+    supabase
+      .from("usuarios")
+      .select("id, email, roles(nombre, rol_permiso(permisos(clave)))")
+      .eq("id", user.id)
+      .single(),
+    supabase
+      .from("perfiles")
+      .select("nombre, apellidos, foto_url")
+      .eq("usuario_id", user.id)
+      .maybeSingle(),
+  ]);
 
   if (!usuario) return null;
 

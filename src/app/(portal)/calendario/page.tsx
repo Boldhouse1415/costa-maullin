@@ -11,7 +11,7 @@ export default async function PaginaCalendario() {
 
   const hoy = new Date().toISOString().slice(0, 10);
 
-  const [{ data: proximos }, { data: pasados }, { data: categorias }] = await Promise.all([
+  const [{ data: proximos }, { data: pasados }, categoriasData] = await Promise.all([
     supabase
       .from("eventos")
       .select("id, titulo, descripcion, fecha, hora, lugar, categorias_evento(nombre)")
@@ -23,8 +23,11 @@ export default async function PaginaCalendario() {
       .lt("fecha", hoy)
       .order("fecha", { ascending: false })
       .limit(10),
-    supabase.from("categorias_evento").select("id, nombre").order("nombre"),
+    puedeGestionar
+      ? supabase.from("categorias_evento").select("id, nombre").order("nombre")
+      : Promise.resolve({ data: [] as { id: string; nombre: string }[] }),
   ]);
+  const categorias = categoriasData.data;
 
   function formatearFecha(fecha: string) {
     return new Date(fecha).toLocaleDateString("es-CL", {

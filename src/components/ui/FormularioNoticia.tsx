@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import { SelectorArchivo } from "./SelectorArchivo";
 
 export function FormularioNoticia() {
   const [abierto, setAbierto] = useState(false);
@@ -97,16 +98,15 @@ export function FormularioNoticia() {
         className="rounded-xl border border-arena-300 bg-white px-3 py-2 text-sm text-bosque-900 outline-none focus:border-bosque-500"
       />
 
-      <label className="flex flex-col gap-1 text-sm text-bosque-700">
-        Foto (opcional) — útil para avisos obvios de mostrar
-        <input
-          type="file"
+      <div className="flex flex-col gap-1">
+        <p className="text-sm text-bosque-700">Foto (opcional) — útil para avisos obvios de mostrar</p>
+        <SelectorArchivo
+          label="Capturar foto"
           accept="image/*"
           capture="environment"
-          onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
-          className="text-xs text-bosque-500 file:mr-3 file:rounded-full file:border-0 file:bg-bosque-500 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-arena-100"
+          onChange={(archivos) => setFoto(archivos?.[0] ?? null)}
         />
-      </label>
+      </div>
 
       <label className="flex items-center gap-2 text-sm text-bosque-700">
         <input

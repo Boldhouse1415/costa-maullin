@@ -22,17 +22,13 @@ export default async function PaginaPagos() {
 
   const supabase = await crearClienteServidor();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const [{ data: config }, { data: vinculos }, formularioData] = await Promise.all([
     supabase.from("configuracion").select("valor").eq("clave", "datos_bancarios_tesoreria").maybeSingle(),
-    user
+    usuario
       ? supabase
           .from("propietario_parcela")
           .select("parcela_id, parcelas(numero)")
-          .eq("usuario_id", user.id)
+          .eq("usuario_id", usuario.id)
           .eq("estado", "aprobado")
       : Promise.resolve({ data: [] as any[] }),
     puedeRegistrar

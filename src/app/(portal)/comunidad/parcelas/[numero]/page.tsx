@@ -45,7 +45,10 @@ export default async function PaginaDetalleParcela({
 
   return (
     <div className="flex flex-col gap-4 px-5 py-8">
-      <Link href="/comunidad/mapa" className="text-sm text-bosque-500 underline">
+      <Link
+        href="/comunidad/mapa"
+        className="inline-flex w-fit items-center gap-1.5 rounded-full bg-bosque-500 px-4 py-2 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
+      >
         ← Volver al mapa
       </Link>
 
@@ -89,7 +92,7 @@ export default async function PaginaDetalleParcela({
                     href={`https://wa.me/${v.whatsapp.replace(/[^0-9]/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-oceano-600 underline"
+                    className="mt-1 inline-flex items-center rounded-full bg-bosque-700 px-3 py-1.5 text-xs font-medium text-arena-100 transition hover:bg-bosque-900"
                   >
                     Escribir por WhatsApp
                   </a>

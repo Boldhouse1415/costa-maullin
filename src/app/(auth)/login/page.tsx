@@ -58,11 +58,17 @@ export default function PaginaLogin() {
         </button>
       </form>
 
-      <div className="flex justify-between text-sm text-bosque-500">
-        <Link href="/recuperar" className="underline">
+      <div className="flex gap-2">
+        <Link
+          href="/recuperar"
+          className="flex-1 rounded-full bg-arena-200 py-2.5 text-center text-sm font-medium text-bosque-900 transition hover:bg-arena-300"
+        >
           Olvidé mi contraseña
         </Link>
-        <Link href="/registro" className="underline">
+        <Link
+          href="/registro"
+          className="flex-1 rounded-full bg-bosque-500 py-2.5 text-center text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
+        >
           Crear cuenta
         </Link>
       </div>

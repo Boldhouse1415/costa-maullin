@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/server";
 
 export default async function PaginaPerfil() {
@@ -18,6 +19,7 @@ export default async function PaginaPerfil() {
     "use server";
     const supabase = await crearClienteServidor();
     await supabase.auth.signOut();
+    redirect("/login");
   }
 
   return (

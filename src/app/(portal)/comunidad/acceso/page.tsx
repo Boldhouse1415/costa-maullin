@@ -6,7 +6,6 @@ import { FormularioClave } from "@/components/ui/FormularioClave";
 
 export default async function PaginaAcceso() {
   const usuario = await obtenerUsuarioActual();
-  const puedeVerClave = tienePermiso(usuario, "accesos.ver_clave");
   const puedeCambiarClave = tienePermiso(usuario, "accesos.cambiar_clave");
   const puedeVerHistorial = tienePermiso(usuario, "accesos.ver_historial");
 
@@ -20,16 +19,12 @@ export default async function PaginaAcceso() {
 
   const direccion = (ubicacionConfig?.valor as any)?.direccion as string | undefined;
 
-  let clave: string | null = null;
-  let accesoId: string | null = null;
-  if (puedeVerClave) {
-    const { data: acceso } = await supabase
-      .from("accesos")
-      .select("id, clave_actual")
-      .maybeSingle();
-    clave = acceso?.clave_actual ?? null;
-    accesoId = acceso?.id ?? null;
-  }
+  const { data: acceso } = await supabase
+    .from("accesos")
+    .select("id, clave_actual")
+    .maybeSingle();
+  const clave: string | null = acceso?.clave_actual ?? null;
+  const accesoId: string | null = acceso?.id ?? null;
 
   let historial: { fecha_cambio: string }[] = [];
   if (puedeVerHistorial) {
@@ -49,29 +44,23 @@ export default async function PaginaAcceso() {
         <p className="mb-2 text-xs uppercase tracking-wide text-bosque-500">
           Clave del candado
         </p>
-        {puedeVerClave ? (
-          <div className="tarjeta flex flex-col gap-3 p-4">
-            {clave ? (
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-semibold tracking-[0.3em] text-bosque-900">
-                  {clave}
-                </span>
-                <BotonCopiar valor={clave} />
-              </div>
-            ) : (
-              <p className="text-sm text-bosque-500">Todavía no se ha registrado una clave.</p>
-            )}
-            {puedeCambiarClave && accesoId && (
-              <div className="border-t border-arena-300 pt-3">
-                <FormularioClave accesoId={accesoId} />
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="tarjeta p-4 text-sm text-bosque-500">
-            Solicita la clave del candado a administración.
-          </div>
-        )}
+        <div className="tarjeta flex flex-col gap-3 p-4">
+          {clave ? (
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-semibold tracking-[0.3em] text-bosque-900">
+                {clave}
+              </span>
+              <BotonCopiar valor={clave} />
+            </div>
+          ) : (
+            <p className="text-sm text-bosque-500">Todavía no se ha registrado una clave.</p>
+          )}
+          {puedeCambiarClave && accesoId && (
+            <div className="border-t border-arena-300 pt-3">
+              <FormularioClave accesoId={accesoId} />
+            </div>
+          )}
+        </div>
       </div>
 
       {puedeVerHistorial && historial.length > 0 && (

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import { SelectorArchivo } from "./SelectorArchivo";
 
 const CATEGORIAS = [
   "Mantención",
@@ -19,7 +20,6 @@ export function FormularioReporte() {
   const [categoria, setCategoria] = useState(CATEGORIAS[0]);
   const [comentario, setComentario] = useState("");
   const [fotos, setFotos] = useState<FileList | null>(null);
-  const [audio, setAudio] = useState<File | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [enviado, setEnviado] = useState(false);
@@ -60,21 +60,6 @@ export function FormularioReporte() {
       }
     }
 
-    let audio_url: string | null = null;
-    if (audio) {
-      const ruta = `reportes/${user.id}/${Date.now()}-${audio.name}`;
-      const { error: errorAudio } = await supabase.storage
-        .from("adjuntos")
-        .upload(ruta, audio);
-      if (errorAudio) {
-        setEnviando(false);
-        setError("No se pudo subir el audio. Intenta nuevamente.");
-        return;
-      }
-      const { data: publica } = supabase.storage.from("adjuntos").getPublicUrl(ruta);
-      audio_url = publica.publicUrl;
-    }
-
     // Si el usuario tiene una parcela aprobada, la asociamos automáticamente.
     const { data: vinculo } = await supabase
       .from("propietario_parcela")
@@ -89,7 +74,6 @@ export function FormularioReporte() {
       parcela_id: vinculo?.parcela_id ?? null,
       categoria,
       foto_urls,
-      audio_url,
       comentario: comentario || null,
     });
 
@@ -102,7 +86,6 @@ export function FormularioReporte() {
 
     setComentario("");
     setFotos(null);
-    setAudio(null);
     setEnviado(true);
     router.refresh();
     setTimeout(() => setEnviado(false), 3000);
@@ -133,28 +116,16 @@ export function FormularioReporte() {
         className="rounded-xl border border-arena-300 bg-white px-3 py-2 text-sm text-bosque-900 outline-none focus:border-bosque-500"
       />
 
-      <label className="flex flex-col gap-1 text-sm text-bosque-700">
-        Fotos (opcional)
-        <input
-          type="file"
+      <div className="flex flex-col gap-1">
+        <p className="text-sm text-bosque-700">Fotos (opcional)</p>
+        <SelectorArchivo
+          label="Capturar foto"
           accept="image/*"
           capture="environment"
           multiple
-          onChange={(e) => setFotos(e.target.files)}
-          className="text-xs text-bosque-500 file:mr-3 file:rounded-full file:border-0 file:bg-bosque-500 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-arena-100"
+          onChange={setFotos}
         />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-bosque-700">
-        Audio (opcional)
-        <input
-          type="file"
-          accept="audio/*"
-          capture="user"
-          onChange={(e) => setAudio(e.target.files?.[0] ?? null)}
-          className="text-xs text-bosque-500 file:mr-3 file:rounded-full file:border-0 file:bg-bosque-500 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-arena-100"
-        />
-      </label>
+      </div>
 
       {error && <p className="text-sm text-rojo-semaforo">{error}</p>}
       {enviado && <p className="text-sm text-bosque-700">¡Reporte enviado! Gracias por avisar.</p>}

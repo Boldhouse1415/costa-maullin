@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icono } from "./Icono";
 
 const destinos = [
-  { href: "/inicio", etiqueta: "Inicio", icono: "🏠" },
-  { href: "/mi-parcela", etiqueta: "Parcela", icono: "🌲" },
-  { href: "/reportar", etiqueta: "Reportar", icono: "📍", destacado: true },
-  { href: "/comunidad", etiqueta: "Comunidad", icono: "💬" },
-  { href: "/perfil", etiqueta: "Perfil", icono: "👤" },
+  { href: "/inicio", etiqueta: "Inicio", icono: "inicio" as const },
+  { href: "/mi-parcela", etiqueta: "Parcela", icono: "parcela" as const },
+  { href: "/reportar", etiqueta: "Reportar", icono: "reportar" as const, destacado: true },
+  { href: "/comunidad", etiqueta: "Comunidad", icono: "comunidad" as const },
+  { href: "/perfil", etiqueta: "Perfil", icono: "perfil" as const },
 ];
 
 export function BarraNavegacionInferior() {
@@ -34,11 +35,11 @@ export function BarraNavegacionInferior() {
                 <span
                   className={
                     d.destacado
-                      ? "flex h-12 w-12 items-center justify-center rounded-full bg-bosque-700 text-xl text-arena-100 shadow-lg"
-                      : "text-lg"
+                      ? "flex h-12 w-12 items-center justify-center rounded-full bg-bosque-700 text-arena-100 shadow-lg"
+                      : ""
                   }
                 >
-                  {d.icono}
+                  <Icono nombre={d.icono} className={d.destacado ? "h-6 w-6" : "h-5 w-5"} />
                 </span>
                 {d.etiqueta}
               </Link>

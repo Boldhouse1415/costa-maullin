@@ -13,6 +13,7 @@ export default function PaginaOnboarding() {
   const [numeroParcela, setNumeroParcela] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aprobadoAlInstante, setAprobadoAlInstante] = useState(false);
 
   const supabase = crearClienteNavegador();
 
@@ -71,10 +72,21 @@ export default function PaginaOnboarding() {
       return;
     }
 
+    // Si nadie más tiene esta parcela aprobada todavía, se aprueba al instante
+    // (sin pasar por revisión de un administrador). Si ya tiene un propietario
+    // vinculado, la solicitud queda pendiente para que administración la revise.
+    const { count: yaVinculada } = await supabase
+      .from("propietario_parcela")
+      .select("id", { count: "exact", head: true })
+      .eq("parcela_id", parcela.id)
+      .eq("estado", "aprobado");
+
+    const estadoInicial = yaVinculada && yaVinculada > 0 ? "pendiente" : "aprobado";
+
     const { error: errorSolicitud } = await supabase.from("propietario_parcela").insert({
       usuario_id: user.id,
       parcela_id: parcela.id,
-      estado: "pendiente",
+      estado: estadoInicial,
     });
 
     setGuardando(false);
@@ -82,6 +94,7 @@ export default function PaginaOnboarding() {
       setError("No pudimos enviar tu solicitud, intenta de nuevo.");
       return;
     }
+    setAprobadoAlInstante(estadoInicial === "aprobado");
     setPaso(4);
   }
 
@@ -164,8 +177,8 @@ export default function PaginaOnboarding() {
             <div className="flex flex-col gap-3">
               <h2 className="text-lg font-medium text-bosque-900">Tu parcela</h2>
               <p className="text-sm text-bosque-500">
-                Indica el número de tu parcela. Un administrador validará el vínculo
-                antes de darte acceso a su información.
+                Indica el número de tu parcela. Si nadie más la tiene vinculada, quedarás
+                asociado de inmediato.
               </p>
               <input
                 placeholder="N.° de parcela"
@@ -187,11 +200,12 @@ export default function PaginaOnboarding() {
           {paso === 4 && (
             <div className="flex flex-col gap-4 text-center">
               <h2 className="text-lg font-medium text-bosque-900">
-                Solicitud enviada
+                {aprobadoAlInstante ? "¡Listo!" : "Solicitud enviada"}
               </h2>
               <p className="text-sm text-bosque-500">
-                Administración recibió tu solicitud para vincular la Parcela N.°{" "}
-                {numeroParcela}. Te avisaremos apenas sea aprobada.
+                {aprobadoAlInstante
+                  ? `Quedaste vinculado a la Parcela N.° ${numeroParcela}. Ya puedes ver su información.`
+                  : `Esta parcela ya tiene un propietario registrado, así que tu solicitud para la Parcela N.° ${numeroParcela} quedó pendiente de revisión por administración.`}
               </p>
               <a
                 href="/inicio"

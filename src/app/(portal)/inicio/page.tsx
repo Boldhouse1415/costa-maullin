@@ -1,5 +1,6 @@
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { TarjetaResumen } from "@/components/ui/TarjetaResumen";
+import { Icono } from "@/components/ui/Icono";
 
 export default async function PaginaInicio() {
   const supabase = await crearClienteServidor();
@@ -69,7 +70,7 @@ export default async function PaginaInicio() {
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-arena-200">Costa Maullín</p>
           <h1 className="text-2xl font-semibold text-arena-100">
-            Hola{nombre ? `, ${nombre}` : ""} 👋
+            Hola{nombre ? `, ${nombre}` : ""}
           </h1>
           {primeraParcela && (
             <p className="text-sm text-arena-200">Parcela {primeraParcela.numero}</p>
@@ -120,19 +121,20 @@ export default async function PaginaInicio() {
           </p>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { href: "/mi-parcela", label: "Mi Parcela", icono: "🌲" },
-              { href: "/pagos", label: "Mis Pagos", icono: "💳" },
-              { href: "/calendario", label: "Calendario", icono: "📅" },
-              { href: "/comunidad", label: "Documentos", icono: "📄" },
-              { href: "/comunidad/acceso", label: "Acceso", icono: "🔑" },
-              { href: "/comunidad/contactos", label: "Contactos", icono: "📞" },
+              { href: "/mi-parcela", label: "Mi Parcela", icono: "parcela" as const },
+              { href: "/comunidad/mapa", label: "Mapa", icono: "mapa" as const },
+              { href: "/pagos", label: "Mis Pagos", icono: "pagos" as const },
+              { href: "/calendario", label: "Calendario", icono: "calendario" as const },
+              { href: "/comunidad", label: "Documentos", icono: "documentos" as const },
+              { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" as const },
+              { href: "/comunidad/contactos", label: "Contactos", icono: "contactos" as const },
             ].map((a) => (
               <a
                 key={a.href}
                 href={a.href}
-                className="tarjeta flex flex-col items-center gap-1 p-3 text-center text-xs text-bosque-700"
+                className="tarjeta flex flex-col items-center gap-1.5 p-3 text-center text-xs text-bosque-700"
               >
-                <span className="text-xl">{a.icono}</span>
+                <Icono nombre={a.icono} className="h-6 w-6 text-bosque-700" />
                 {a.label}
               </a>
             ))}

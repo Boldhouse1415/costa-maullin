@@ -80,12 +80,15 @@ export default async function PaginaInicio() {
 
       <div className="flex flex-col gap-4 px-5 py-5">
         {!primeraParcela && (
-          <div className="tarjeta p-4 text-sm text-bosque-700">
-            Aún no tienes una parcela vinculada aprobada.{" "}
-            <a href="/onboarding" className="underline">
-              Completa tu solicitud aquí
+          <div className="tarjeta flex flex-col gap-3 p-4 text-sm text-bosque-700">
+            <p>Aún no tienes una parcela vinculada aprobada.</p>
+            <a
+              href="/onboarding"
+              className="flex items-center justify-center gap-2 rounded-full bg-bosque-700 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
+            >
+              <Icono nombre="parcela" className="h-4 w-4" />
+              Inscribe tu parcela aquí
             </a>
-            .
           </div>
         )}
 

@@ -37,8 +37,7 @@ export default async function PaginaPerfil() {
       </div>
 
       <div className="tarjeta flex flex-col gap-2 p-4 text-sm text-bosque-700">
-        <p>Teléfono: {perfil?.telefono ?? "—"}</p>
-        <p>WhatsApp: {perfil?.whatsapp ?? "—"}</p>
+        <p>Teléfono / WhatsApp: {perfil?.telefono ?? "—"}</p>
       </div>
 
       <form action={cerrarSesion}>

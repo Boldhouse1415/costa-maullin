@@ -10,7 +10,6 @@ export default function PaginaOnboarding() {
   const [nombre, setNombre] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
   const [numeroParcela, setNumeroParcela] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,9 +29,11 @@ export default function PaginaOnboarding() {
       return;
     }
 
+    const telefonoCompleto = `+56 9${telefono}`;
+
     const { error: errorPerfil } = await supabase
       .from("perfiles")
-      .update({ nombre, apellidos, telefono, whatsapp })
+      .update({ nombre, apellidos, telefono: telefonoCompleto, whatsapp: telefonoCompleto })
       .eq("usuario_id", user.id);
 
     setGuardando(false);
@@ -131,18 +132,23 @@ export default function PaginaOnboarding() {
                 onChange={(e) => setApellidos(e.target.value)}
                 className="h-12 rounded-xl border border-arena-300 bg-white px-4 text-bosque-900 outline-none focus:border-bosque-500"
               />
-              <input
-                placeholder="Teléfono"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                className="h-12 rounded-xl border border-arena-300 bg-white px-4 text-bosque-900 outline-none focus:border-bosque-500"
-              />
-              <input
-                placeholder="WhatsApp (si es distinto)"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                className="h-12 rounded-xl border border-arena-300 bg-white px-4 text-bosque-900 outline-none focus:border-bosque-500"
-              />
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-12 items-center rounded-xl border border-arena-300 bg-arena-200 px-3 text-sm font-medium text-bosque-500">
+                    +56 9
+                  </span>
+                  <input
+                    placeholder="1234 5678"
+                    inputMode="numeric"
+                    value={telefono}
+                    onChange={(e) => setTelefono(e.target.value.replace(/[^0-9]/g, ""))}
+                    className="h-12 flex-1 rounded-xl border border-arena-300 bg-white px-4 text-bosque-900 outline-none focus:border-bosque-500"
+                  />
+                </div>
+                <p className="text-xs text-bosque-500">
+                  Este número también se usará como tu WhatsApp de contacto.
+                </p>
+              </div>
               {error && <p className="text-sm text-rojo-semaforo">{error}</p>}
               <button
                 onClick={guardarDatosYContinuar}

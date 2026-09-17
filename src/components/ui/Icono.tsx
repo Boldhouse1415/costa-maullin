@@ -9,7 +9,8 @@ type NombreIcono =
   | "calendario"
   | "documentos"
   | "acceso"
-  | "contactos";
+  | "contactos"
+  | "noticias";
 
 const trazos: Record<NombreIcono, React.ReactNode> = {
   inicio: (
@@ -77,6 +78,13 @@ const trazos: Record<NombreIcono, React.ReactNode> = {
   ),
   contactos: (
     <path d="M6.5 4.5c.6 1.7 1.4 3.2 2.5 4.3-1 1-1 1.6-.5 2.5.9 1.7 2.5 3.3 4.2 4.2.9.5 1.5.5 2.5-.5 1.1 1.1 2.6 1.9 4.3 2.5.6.2 1 .8.9 1.4l-.4 2a1.2 1.2 0 0 1-1.3 1c-8-.8-14.5-7.3-15.3-15.3a1.2 1.2 0 0 1 1-1.3l2-.4c.6-.1 1.2.3 1.4.9Z" />
+  ),
+  noticias: (
+    <>
+      <path d="M3 9.5v5a1 1 0 0 0 1 1h2.3l8.4 4V4.5l-8.4 4H4a1 1 0 0 0-1 1Z" />
+      <path d="M9.5 15.3v3a1.4 1.4 0 0 0 1.4 1.4h.4a1.4 1.4 0 0 0 1.4-1.6l-.4-2.4" />
+      <path d="M18.2 9.2a4.2 4.2 0 0 1 0 5.6M20.5 7.2a7.3 7.3 0 0 1 0 9.6" />
+    </>
   ),
 };
 

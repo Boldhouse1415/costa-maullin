@@ -73,7 +73,7 @@ export default async function PaginaAcceso() {
                 href={`https://waze.com/ul?q=${encodeURIComponent(direccion)}&navigate=yes`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-2 rounded-full border border-arena-300 py-2.5 text-sm font-medium text-bosque-700 transition hover:bg-arena-200"
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-bosque-500 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
               >
                 <Icono nombre="mapa" className="h-4 w-4" />
                 Waze

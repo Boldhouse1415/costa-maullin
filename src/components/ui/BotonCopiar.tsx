@@ -19,7 +19,7 @@ export function BotonCopiar({ valor, etiqueta = "Copiar" }: { valor: string; eti
     <button
       type="button"
       onClick={copiar}
-      className="rounded-full border border-arena-300 px-3 py-1 text-xs font-medium text-bosque-700 transition hover:bg-arena-200"
+      className="shrink-0 rounded-full bg-bosque-500 px-4 py-2 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
     >
       {copiado ? "¡Copiado!" : etiqueta}
     </button>

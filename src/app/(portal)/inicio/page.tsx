@@ -125,6 +125,7 @@ export default async function PaginaInicio() {
           <div className="grid grid-cols-3 gap-3">
             {[
               { href: "/mi-parcela", label: "Mi Parcela", icono: "parcela" as const },
+              { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const },
               { href: "/comunidad/mapa", label: "Mapa", icono: "mapa" as const },
               { href: "/pagos", label: "Mis Pagos", icono: "pagos" as const },
               { href: "/calendario", label: "Calendario", icono: "calendario" as const },

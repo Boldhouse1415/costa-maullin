@@ -43,7 +43,7 @@ export default async function PaginaPerfil() {
       <form action={cerrarSesion}>
         <button
           type="submit"
-          className="h-12 w-full rounded-full border border-arena-300 font-medium text-bosque-700 transition hover:bg-arena-200"
+          className="h-12 w-full rounded-full bg-bosque-500 font-medium text-arena-100 transition hover:bg-bosque-900"
         >
           Cerrar sesión
         </button>

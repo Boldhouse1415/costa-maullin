@@ -8,8 +8,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <Image
             src="/logo-costa-maullin-blanco.png"
             alt="Costa Maullín — Portal de la comunidad"
-            width={2069}
-            height={760}
+            width={900}
+            height={331}
             priority
             className="h-auto w-full max-w-[420px]"
           />

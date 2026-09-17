@@ -16,7 +16,8 @@ export type NombreIcono =
   | "lluvia"
   | "check"
   | "alerta"
-  | "llave";
+  | "llave"
+  | "flecha";
 
 const trazos: Record<NombreIcono, React.ReactNode> = {
   inicio: (
@@ -120,6 +121,7 @@ const trazos: Record<NombreIcono, React.ReactNode> = {
       <path d="M10.2 12H20M16 12v3M19 12v2" />
     </>
   ),
+  flecha: <path d="M9 5.5 15.5 12 9 18.5" />,
 };
 
 export function Icono({

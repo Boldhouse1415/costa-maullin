@@ -89,7 +89,6 @@ export default async function PaginaInicio() {
     { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" },
     { href: "/comunidad/contactos", label: "Contactos", icono: "contactos" },
   ];
-  const coloresTile = ["bg-bosque-700", "bg-bosque-500"];
 
   return (
     <div className="flex flex-col">
@@ -166,15 +165,18 @@ export default async function PaginaInicio() {
           <p className="mb-2 text-xs uppercase tracking-wide text-bosque-500">
             Accesos rápidos
           </p>
-          <div className="grid grid-cols-3 gap-3">
-            {accesos.map((a, i) => (
+          <div className="flex flex-col gap-3">
+            {accesos.map((a) => (
               <a
                 key={a.href}
                 href={a.href}
-                className={`flex flex-col items-center gap-1.5 rounded-2xl p-3 text-center text-xs font-medium text-arena-100 transition hover:brightness-110 ${coloresTile[i % coloresTile.length]}`}
+                className="tarjeta flex items-center gap-4 rounded-3xl px-5 py-4 transition hover:bg-arena-200"
               >
-                <Icono nombre={a.icono} className="h-6 w-6 text-arena-100" />
-                {a.label}
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-bosque-300/30 text-bosque-700">
+                  <Icono nombre={a.icono} className="h-6 w-6" />
+                </span>
+                <span className="flex-1 text-base font-medium text-bosque-900">{a.label}</span>
+                <Icono nombre="flecha" className="h-5 w-5 shrink-0 text-bosque-300" />
               </a>
             ))}
           </div>

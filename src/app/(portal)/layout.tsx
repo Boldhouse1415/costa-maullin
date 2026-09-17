@@ -21,8 +21,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <Image
               src="/logo-costa-maullin.png"
               alt="Costa Maullín — Ir al inicio"
-              width={2070}
-              height={760}
+              width={900}
+              height={330}
               priority
               className="h-14 w-auto sm:h-20"
             />

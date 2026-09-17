@@ -1,10 +1,11 @@
 import { Icono } from "@/components/ui/Icono";
 
 const secciones = [
-  { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const },
-  { href: "/comunidad/mapa", label: "Mapa de parcelas", icono: "mapa" as const },
-  { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" as const },
-  { href: "/comunidad/contactos", label: "Contactos útiles", icono: "contactos" as const },
+  { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const, color: "bg-bosque-700" },
+  { href: "/comunidad/mapa", label: "Mapa de parcelas", icono: "mapa" as const, color: "bg-bosque-500" },
+  { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" as const, color: "bg-bosque-500" },
+  { href: "/comunidad/contactos", label: "Contactos útiles", icono: "contactos" as const, color: "bg-bosque-700" },
+  { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" as const, color: "bg-bosque-500" },
 ];
 
 export default function PaginaComunidad() {
@@ -20,9 +21,9 @@ export default function PaginaComunidad() {
           <a
             key={s.href}
             href={s.href}
-            className="tarjeta flex flex-col items-center gap-2 p-5 text-center text-sm text-bosque-700"
+            className={`flex flex-col items-center gap-2 rounded-2xl p-5 text-center text-sm font-medium text-arena-100 transition hover:brightness-110 ${s.color}`}
           >
-            <Icono nombre={s.icono} className="h-7 w-7 text-bosque-700" />
+            <Icono nombre={s.icono} className="h-7 w-7 text-arena-100" />
             {s.label}
           </a>
         ))}

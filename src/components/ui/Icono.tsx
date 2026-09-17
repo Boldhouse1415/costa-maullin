@@ -1,4 +1,4 @@
-type NombreIcono =
+export type NombreIcono =
   | "inicio"
   | "parcela"
   | "reportar"
@@ -10,7 +10,13 @@ type NombreIcono =
   | "documentos"
   | "acceso"
   | "contactos"
-  | "noticias";
+  | "noticias"
+  | "sol"
+  | "nublado"
+  | "lluvia"
+  | "check"
+  | "alerta"
+  | "llave";
 
 const trazos: Record<NombreIcono, React.ReactNode> = {
   inicio: (
@@ -84,6 +90,34 @@ const trazos: Record<NombreIcono, React.ReactNode> = {
       <path d="M3 9.5v5a1 1 0 0 0 1 1h2.3l8.4 4V4.5l-8.4 4H4a1 1 0 0 0-1 1Z" />
       <path d="M9.5 15.3v3a1.4 1.4 0 0 0 1.4 1.4h.4a1.4 1.4 0 0 0 1.4-1.6l-.4-2.4" />
       <path d="M18.2 9.2a4.2 4.2 0 0 1 0 5.6M20.5 7.2a7.3 7.3 0 0 1 0 9.6" />
+    </>
+  ),
+  sol: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 3v2.2M12 18.8V21M4.2 12H2M22 12h-2.2M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6" />
+    </>
+  ),
+  nublado: (
+    <path d="M7 18.5a4 4 0 0 1-.5-7.97A5 5 0 0 1 16.2 9.1 4.2 4.2 0 0 1 16.8 18.5H7Z" />
+  ),
+  lluvia: (
+    <>
+      <path d="M7 15.5a4 4 0 0 1-.5-7.97A5 5 0 0 1 16.2 6.6 4.2 4.2 0 0 1 16.8 15.5H7Z" />
+      <path d="M8.5 18v1.6M12 18v1.6M15.5 18v1.6" />
+    </>
+  ),
+  check: <path d="M4.5 12.8 9 17.3 19.5 6.7" />,
+  alerta: (
+    <>
+      <path d="M12 3.5 21.5 20h-19L12 3.5Z" />
+      <path d="M12 10v4.2M12 17.2v.1" />
+    </>
+  ),
+  llave: (
+    <>
+      <circle cx="7" cy="12" r="3.3" />
+      <path d="M10.2 12H20M16 12v3M19 12v2" />
     </>
   ),
 };

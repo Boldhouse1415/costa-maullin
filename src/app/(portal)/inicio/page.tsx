@@ -1,6 +1,40 @@
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { TarjetaResumen } from "@/components/ui/TarjetaResumen";
-import { Icono } from "@/components/ui/Icono";
+import { Icono, type NombreIcono } from "@/components/ui/Icono";
+
+// Coordenadas de Maullín, Chile.
+const LAT = -41.6167;
+const LON = -73.6167;
+
+function climaDesdeCodigo(codigo: number): { icono: NombreIcono; texto: string } {
+  if (codigo === 0) return { icono: "sol", texto: "Despejado" };
+  if ([1, 2].includes(codigo)) return { icono: "sol", texto: "Parcialmente nublado" };
+  if ([3, 45, 48].includes(codigo)) return { icono: "nublado", texto: "Nublado" };
+  if (
+    [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 71, 73, 75, 77, 85, 86, 95, 96, 99].includes(
+      codigo,
+    )
+  )
+    return { icono: "lluvia", texto: "Lluvia" };
+  return { icono: "nublado", texto: "Nublado" };
+}
+
+async function obtenerClima() {
+  try {
+    const res = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&timezone=America%2FSantiago`,
+      { next: { revalidate: 1800 } },
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const temp = data?.current?.temperature_2m;
+    const codigo = data?.current?.weather_code;
+    if (typeof temp !== "number" || typeof codigo !== "number") return null;
+    return { temp: Math.round(temp), ...climaDesdeCodigo(codigo) };
+  } catch {
+    return null;
+  }
+}
 
 export default async function PaginaInicio() {
   const supabase = await crearClienteServidor();
@@ -9,53 +43,53 @@ export default async function PaginaInicio() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: perfil } = user
-    ? await supabase
-        .from("perfiles")
-        .select("nombre, foto_url")
-        .eq("usuario_id", user.id)
-        .maybeSingle()
-    : { data: null };
-
-  const { data: vinculos } = user
-    ? await supabase
-        .from("propietario_parcela")
-        .select("estado, parcelas(numero)")
-        .eq("usuario_id", user.id)
-        .eq("estado", "aprobado")
-    : { data: [] as any[] };
-
-  const { data: configEstado } = await supabase
-    .from("configuracion")
-    .select("valor")
-    .eq("clave", "estado_general")
-    .maybeSingle();
+  const [{ data: perfil }, { data: vinculos }, { data: configEstado }, { data: proximoEvento }, { data: avisoDestacado }, clima] =
+    await Promise.all([
+      user
+        ? supabase.from("perfiles").select("nombre, foto_url").eq("usuario_id", user.id).maybeSingle()
+        : Promise.resolve({ data: null }),
+      user
+        ? supabase
+            .from("propietario_parcela")
+            .select("estado, parcelas(numero)")
+            .eq("usuario_id", user.id)
+            .eq("estado", "aprobado")
+        : Promise.resolve({ data: [] as any[] }),
+      supabase.from("configuracion").select("valor").eq("clave", "estado_general").maybeSingle(),
+      supabase
+        .from("eventos")
+        .select("titulo, fecha, hora")
+        .gte("fecha", new Date().toISOString().slice(0, 10))
+        .order("fecha", { ascending: true })
+        .limit(1)
+        .maybeSingle(),
+      supabase.from("avisos").select("titulo, texto").order("fecha", { ascending: false }).limit(1).maybeSingle(),
+      obtenerClima(),
+    ]);
 
   const estadoGeneral = (configEstado?.valor as any) ?? {
     nivel: "verde",
     titulo: "Todo normal",
   };
 
-  const { data: proximoEvento } = await supabase
-    .from("eventos")
-    .select("titulo, fecha, hora")
-    .gte("fecha", new Date().toISOString().slice(0, 10))
-    .order("fecha", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  const { data: avisoDestacado } = await supabase
-    .from("avisos")
-    .select("titulo, texto")
-    .order("fecha", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
   const primeraParcela = vinculos?.[0]?.parcelas as any;
   const nombre = perfil?.nombre ?? "";
 
-  const tonoEstado: "verde" | "amarillo" | "rojo" =
-    estadoGeneral.nivel === "rojo" ? "rojo" : estadoGeneral.nivel === "amarillo" ? "amarillo" : "verde";
+  const varianteEstado =
+    estadoGeneral.nivel === "rojo" ? "rojo" : estadoGeneral.nivel === "amarillo" ? "amarillo" : "claro";
+  const iconoEstado = estadoGeneral.nivel === "verde" || !estadoGeneral.nivel ? "check" : "alerta";
+
+  const accesos: { href: string; label: string; icono: NombreIcono }[] = [
+    { href: "/mi-parcela", label: "Mi Parcela", icono: "parcela" },
+    { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" },
+    { href: "/comunidad/mapa", label: "Mapa", icono: "mapa" },
+    { href: "/pagos", label: "Mis Pagos", icono: "pagos" },
+    { href: "/calendario", label: "Calendario", icono: "calendario" },
+    { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" },
+    { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" },
+    { href: "/comunidad/contactos", label: "Contactos", icono: "contactos" },
+  ];
+  const coloresTile = ["bg-bosque-700", "bg-bosque-500"];
 
   return (
     <div className="flex flex-col">
@@ -93,11 +127,19 @@ export default async function PaginaInicio() {
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <TarjetaResumen titulo="Clima · Maullín" valor="—" detalle="Próximamente" />
+          <TarjetaResumen
+            titulo="Clima · Maullín"
+            valor={clima ? `${clima.temp}°` : "—"}
+            detalle={clima ? clima.texto : "No disponible"}
+            icono={clima?.icono ?? "nublado"}
+            variante="oscuro"
+          />
           <TarjetaResumen
             titulo="Estado Costa Maullín"
             valor={estadoGeneral.titulo}
-            tono={tonoEstado}
+            detalle="Sin alertas activas."
+            icono={iconoEstado}
+            variante={varianteEstado}
           />
         </div>
 
@@ -112,6 +154,8 @@ export default async function PaginaInicio() {
                 })}${proximoEvento.hora ? " · " + proximoEvento.hora : ""}`
               : "No hay próximos eventos."
           }
+          icono="calendario"
+          variante="amarillo"
         />
 
         {avisoDestacado && (
@@ -123,22 +167,13 @@ export default async function PaginaInicio() {
             Accesos rápidos
           </p>
           <div className="grid grid-cols-3 gap-3">
-            {[
-              { href: "/mi-parcela", label: "Mi Parcela", icono: "parcela" as const },
-              { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const },
-              { href: "/comunidad/mapa", label: "Mapa", icono: "mapa" as const },
-              { href: "/pagos", label: "Mis Pagos", icono: "pagos" as const },
-              { href: "/calendario", label: "Calendario", icono: "calendario" as const },
-              { href: "/comunidad", label: "Documentos", icono: "documentos" as const },
-              { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" as const },
-              { href: "/comunidad/contactos", label: "Contactos", icono: "contactos" as const },
-            ].map((a) => (
+            {accesos.map((a, i) => (
               <a
                 key={a.href}
                 href={a.href}
-                className="tarjeta flex flex-col items-center gap-1.5 p-3 text-center text-xs text-bosque-700"
+                className={`flex flex-col items-center gap-1.5 rounded-2xl p-3 text-center text-xs font-medium text-arena-100 transition hover:brightness-110 ${coloresTile[i % coloresTile.length]}`}
               >
-                <Icono nombre={a.icono} className="h-6 w-6 text-bosque-700" />
+                <Icono nombre={a.icono} className="h-6 w-6 text-arena-100" />
                 {a.label}
               </a>
             ))}

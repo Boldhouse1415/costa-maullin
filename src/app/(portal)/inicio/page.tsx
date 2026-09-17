@@ -97,7 +97,7 @@ export default async function PaginaInicio() {
         className="relative flex h-56 items-end bg-cover bg-center px-5 pb-5"
         style={{
           backgroundImage:
-            "linear-gradient(180deg, rgba(22,38,31,0.15) 0%, rgba(22,38,31,0.9) 100%), url(/costa-maullin-referencial.png)",
+            "linear-gradient(180deg, rgba(22,38,31,0.15) 0%, rgba(22,38,31,0.9) 100%), url(/costa-maullin-referencial.jpg)",
         }}
       >
         <div>

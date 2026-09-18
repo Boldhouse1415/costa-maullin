@@ -149,7 +149,7 @@ export default async function PaginaInicio() {
         )}
 
         {contactosEmergencia && contactosEmergencia.length > 0 && (
-          <div className="tarjeta flex flex-col gap-2 border border-rojo-semaforo/40 bg-rojo-semaforo/10 p-4">
+          <div className="flex flex-col gap-2 rounded-2xl border border-rojo-semaforo/40 bg-rojo-semaforo/10 p-4">
             <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-rojo-semaforo">
               <Icono nombre="alerta" className="h-4 w-4" />
               Emergencias

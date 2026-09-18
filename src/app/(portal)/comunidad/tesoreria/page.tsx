@@ -45,7 +45,7 @@ export default async function PaginaTesoreria() {
         </p>
       </div>
 
-      <div className="tarjeta flex flex-col items-center gap-2 bg-bosque-700 p-6 text-center">
+      <div className="flex flex-col items-center gap-2 rounded-2xl bg-bosque-700 p-6 text-center">
         <p className="text-xs uppercase tracking-wide text-arena-200">Saldo en caja</p>
         <p className="text-4xl font-bold text-arena-100">{formatoCLP(caja.monto ?? 0)}</p>
         {caja.actualizado && (

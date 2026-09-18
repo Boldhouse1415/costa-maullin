@@ -87,7 +87,6 @@ export default async function PaginaInicio() {
     { href: "/calendario", label: "Calendario", icono: "calendario" },
     { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" },
     { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" },
-    { href: "/comunidad/contactos", label: "Contactos", icono: "contactos" },
   ];
 
   return (

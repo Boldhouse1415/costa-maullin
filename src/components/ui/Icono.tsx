@@ -17,7 +17,9 @@ export type NombreIcono =
   | "check"
   | "alerta"
   | "llave"
-  | "flecha";
+  | "flecha"
+  | "tesoreria"
+  | "votaciones";
 
 const trazos: Record<NombreIcono, React.ReactNode> = {
   inicio: (
@@ -122,6 +124,21 @@ const trazos: Record<NombreIcono, React.ReactNode> = {
     </>
   ),
   flecha: <path d="M9 5.5 15.5 12 9 18.5" />,
+  tesoreria: (
+    <>
+      <circle cx="8.5" cy="8.5" r="4.5" />
+      <circle cx="15" cy="14.5" r="4.5" />
+      <path d="M8.5 8.5v0M15 14.5v0" />
+    </>
+  ),
+  votaciones: (
+    <>
+      <rect x="4" y="4.5" width="16" height="15" rx="2" />
+      <path d="M8 10.5h8M8 14h5" />
+      <circle cx="7" cy="10.5" r="0.6" fill="currentColor" />
+      <circle cx="7" cy="14" r="0.6" fill="currentColor" />
+    </>
+  ),
 };
 
 export function Icono({

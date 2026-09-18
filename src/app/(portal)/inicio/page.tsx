@@ -43,8 +43,15 @@ export default async function PaginaInicio() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: perfil }, { data: vinculos }, { data: configEstado }, { data: proximoEvento }, { data: avisoDestacado }, clima] =
-    await Promise.all([
+  const [
+    { data: perfil },
+    { data: vinculos },
+    { data: configEstado },
+    { data: proximoEvento },
+    { data: avisoDestacado },
+    { data: contactosEmergencia },
+    clima,
+  ] = await Promise.all([
       user
         ? supabase.from("perfiles").select("nombre, foto_url").eq("usuario_id", user.id).maybeSingle()
         : Promise.resolve({ data: null }),
@@ -64,6 +71,10 @@ export default async function PaginaInicio() {
         .limit(1)
         .maybeSingle(),
       supabase.from("avisos").select("titulo, texto").order("fecha", { ascending: false }).limit(1).maybeSingle(),
+      supabase
+        .from("contactos_utiles")
+        .select("nombre, telefono")
+        .in("nombre", ["Bomberos", "Carabineros", "SAMU / Ambulancia"]),
       obtenerClima(),
     ]);
 
@@ -87,6 +98,8 @@ export default async function PaginaInicio() {
     { href: "/calendario", label: "Calendario", icono: "calendario" },
     { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" },
     { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" },
+    { href: "/comunidad/tesoreria", label: "Tesorería transparente", icono: "tesoreria" },
+    { href: "/comunidad/votaciones", label: "Votaciones", icono: "votaciones" },
   ];
 
   return (
@@ -131,6 +144,26 @@ export default async function PaginaInicio() {
               <Icono nombre="parcela" className="h-4 w-4" />
               Inscribe tu parcela aquí
             </a>
+          </div>
+        )}
+
+        {contactosEmergencia && contactosEmergencia.length > 0 && (
+          <div className="tarjeta flex flex-col gap-2 border border-rojo-semaforo/40 bg-rojo-semaforo/10 p-4">
+            <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-rojo-semaforo">
+              <Icono nombre="alerta" className="h-4 w-4" />
+              Emergencias
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {contactosEmergencia.map((c: any) => (
+                <a
+                  key={c.nombre}
+                  href={`tel:${c.telefono}`}
+                  className="flex-1 rounded-full bg-rojo-semaforo px-3 py-2 text-center text-sm font-medium text-arena-100 transition hover:opacity-90"
+                >
+                  {c.nombre.split(" / ")[0]} · {c.telefono}
+                </a>
+              ))}
+            </div>
           </div>
         )}
 

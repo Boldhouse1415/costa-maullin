@@ -4,6 +4,8 @@ const secciones = [
   { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const },
   { href: "/comunidad/mapa", label: "Mapa de parcelas", icono: "mapa" as const },
   { href: "/comunidad/acceso", label: "Acceso", icono: "acceso" as const },
+  { href: "/comunidad/tesoreria", label: "Tesorería transparente", icono: "tesoreria" as const },
+  { href: "/comunidad/votaciones", label: "Votaciones y encuestas", icono: "votaciones" as const },
   { href: "/comunidad/contactos", label: "Contactos útiles", icono: "contactos" as const },
   { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" as const },
 ];
@@ -13,7 +15,7 @@ export default function PaginaComunidad() {
     <div className="flex flex-col gap-4 px-5 py-8">
       <h1 className="text-xl font-semibold text-bosque-900">Comunidad</h1>
       <p className="text-sm text-bosque-500">
-        Noticias, mapa de vecinos, acceso y contactos útiles de Costa Maullín.
+        Noticias, mapa de vecinos, acceso, tesorería, votaciones y contactos útiles de Costa Maullín.
       </p>
 
       <div className="flex flex-col gap-3">

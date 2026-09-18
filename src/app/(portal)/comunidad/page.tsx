@@ -1,4 +1,5 @@
 import { Icono } from "@/components/ui/Icono";
+import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 
 const secciones = [
   { href: "/comunidad/noticias", label: "Noticias", icono: "noticias" as const },
@@ -10,7 +11,14 @@ const secciones = [
   { href: "/comunidad/documentos", label: "Documentos", icono: "documentos" as const },
 ];
 
-export default function PaginaComunidad() {
+export default async function PaginaComunidad() {
+  const usuario = await obtenerUsuarioActual();
+  const puedeGestionarTesoreria = tienePermiso(usuario, "tesoreria.ver_pagos");
+
+  const items = puedeGestionarTesoreria
+    ? [...secciones, { href: "/comunidad/tesoreria/panel", label: "Panel de Tesorería", icono: "tesoreria" as const }]
+    : secciones;
+
   return (
     <div className="flex flex-col gap-4 px-5 py-8">
       <h1 className="text-xl font-semibold text-bosque-900">Comunidad</h1>
@@ -19,7 +27,7 @@ export default function PaginaComunidad() {
       </p>
 
       <div className="flex flex-col gap-3">
-        {secciones.map((s) => (
+        {items.map((s) => (
           <a
             key={s.href}
             href={s.href}

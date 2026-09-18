@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 import { FormularioGasto } from "@/components/ui/FormularioGasto";
@@ -19,6 +20,7 @@ function formatoCLP(monto: number) {
 export default async function PaginaTesoreria() {
   const usuario = await obtenerUsuarioActual();
   const puedeRegistrarGasto = tienePermiso(usuario, "tesoreria.registrar_gasto");
+  const puedeGestionar = tienePermiso(usuario, "tesoreria.ver_pagos");
 
   const supabase = await crearClienteServidor();
 
@@ -46,6 +48,15 @@ export default async function PaginaTesoreria() {
         <p className="text-sm text-bosque-500">
           Recaudación, gastos y saldo disponible de Costa Maullín, a la vista de todos.
         </p>
+        {puedeGestionar && (
+          <Link
+            href="/comunidad/tesoreria/panel"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-bosque-700 hover:underline"
+          >
+            <Icono nombre="tesoreria" className="h-4 w-4" />
+            Ir al panel de tesorería →
+          </Link>
+        )}
       </div>
 
       <div className="flex flex-col items-center gap-2 rounded-2xl bg-bosque-700 p-6 text-center">

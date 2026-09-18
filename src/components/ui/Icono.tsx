@@ -19,7 +19,10 @@ export type NombreIcono =
   | "llave"
   | "flecha"
   | "tesoreria"
-  | "votaciones";
+  | "votaciones"
+  | "fuego"
+  | "escudo"
+  | "cruz";
 
 const trazos: Record<NombreIcono, React.ReactNode> = {
   inicio: (
@@ -137,6 +140,21 @@ const trazos: Record<NombreIcono, React.ReactNode> = {
       <path d="M8 10.5h8M8 14h5" />
       <circle cx="7" cy="10.5" r="0.6" fill="currentColor" />
       <circle cx="7" cy="14" r="0.6" fill="currentColor" />
+    </>
+  ),
+  fuego: (
+    <path d="M12 21.5c-3.6 0-6.2-2.4-6.2-5.8 0-2.2 1-3.7 2-5.4.2 1.1.9 2 1.9 2.2-.5-3 .5-5.9 3.3-7.9-.5 2.2.2 3.7 1.7 5 1.8 1.6 3.5 3.4 3.5 6.1 0 3.4-2.6 5.8-6.2 5.8Z" />
+  ),
+  escudo: (
+    <>
+      <path d="M12 3.5 19 6v5.5c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-2.5Z" />
+      <path d="M9 12l2 2 4-4.2" />
+    </>
+  ),
+  cruz: (
+    <>
+      <rect x="4" y="4.5" width="16" height="15" rx="3" />
+      <path d="M12 8.5v7M8.5 12h7" />
     </>
   ),
 };

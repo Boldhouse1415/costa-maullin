@@ -34,7 +34,10 @@ export default async function PaginaTesoreria() {
   const ingresos = (movimientos ?? []).reduce((acc, m: any) => acc + (m.monto_pagado ?? 0), 0);
   const egresos = (gastos ?? []).reduce((acc, g: any) => acc + (g.monto ?? 0), 0);
 
-  const caja = (configCaja?.valor as any) ?? { monto: 0, actualizado: null };
+  const caja = (configCaja?.valor as any) ?? { base: 0, actualizado: null };
+  // El saldo en caja se recalcula solo: la base es el último ajuste manual de
+  // tesorería, y desde ahí cada ingreso registrado suma y cada gasto resta.
+  const saldoEnCaja = (caja.base ?? 0) + ingresos - egresos;
 
   return (
     <div className="flex flex-col gap-4 px-5 py-8">
@@ -47,10 +50,10 @@ export default async function PaginaTesoreria() {
 
       <div className="flex flex-col items-center gap-2 rounded-2xl bg-bosque-700 p-6 text-center">
         <p className="text-xs uppercase tracking-wide text-arena-200">Saldo en caja</p>
-        <p className="text-4xl font-bold text-arena-100">{formatoCLP(caja.monto ?? 0)}</p>
+        <p className="text-4xl font-bold text-arena-100">{formatoCLP(saldoEnCaja)}</p>
         {caja.actualizado && (
           <p className="text-xs text-arena-200">
-            Actualizado el{" "}
+            Último ajuste el{" "}
             {new Date(caja.actualizado).toLocaleDateString("es-CL", {
               day: "numeric",
               month: "long",
@@ -58,7 +61,9 @@ export default async function PaginaTesoreria() {
             })}
           </p>
         )}
-        {puedeRegistrarGasto && <FormularioSaldoCaja montoActual={caja.monto ?? 0} />}
+        {puedeRegistrarGasto && (
+          <FormularioSaldoCaja montoActual={saldoEnCaja} ingresos={ingresos} egresos={egresos} />
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -72,8 +77,8 @@ export default async function PaginaTesoreria() {
         </div>
       </div>
       <p className="-mt-2 text-xs text-bosque-500">
-        Ingresos y egresos reflejan lo registrado en la app. El saldo en caja de arriba es el monto real,
-        actualizado manualmente por tesorería.
+        El saldo en caja de arriba se ajusta solo: suma cada ingreso y resta cada gasto que se registre
+        aquí. Tesorería puede corregirlo manualmente cuando haga una conciliación.
       </p>
 
       <div className="flex items-center justify-between gap-3">

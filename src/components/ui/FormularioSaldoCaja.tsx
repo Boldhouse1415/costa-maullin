@@ -4,7 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearClienteNavegador } from "@/lib/supabase/client";
 
-export function FormularioSaldoCaja({ montoActual }: { montoActual: number }) {
+export function FormularioSaldoCaja({
+  montoActual,
+  ingresos,
+  egresos,
+}: {
+  montoActual: number;
+  ingresos: number;
+  egresos: number;
+}) {
   const [abierto, setAbierto] = useState(false);
   const [monto, setMonto] = useState(String(montoActual));
   const [enviando, setEnviando] = useState(false);
@@ -25,11 +33,16 @@ export function FormularioSaldoCaja({ montoActual }: { montoActual: number }) {
 
     setEnviando(true);
 
+    // El saldo mostrado es base + ingresos - egresos. Al corregir el saldo a
+    // mano, se recalcula la base para que desde ahora los nuevos ingresos y
+    // gastos sigan sumando/restando automáticamente sobre este ajuste.
+    const nuevaBase = montoNumerico - ingresos + egresos;
+
     const { error: errorUpdate } = await supabase
       .from("configuracion")
       .update({
         valor: {
-          monto: montoNumerico,
+          base: nuevaBase,
           actualizado: new Date().toISOString().slice(0, 10),
         },
       })

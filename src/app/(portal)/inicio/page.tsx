@@ -6,6 +6,13 @@ import { Icono, type NombreIcono } from "@/components/ui/Icono";
 const LAT = -41.6167;
 const LON = -73.6167;
 
+function iconoContacto(nombre: string): NombreIcono {
+  if (nombre.startsWith("Bomberos")) return "fuego";
+  if (nombre.startsWith("Carabineros")) return "escudo";
+  if (nombre.startsWith("SAMU")) return "cruz";
+  return "alerta";
+}
+
 function climaDesdeCodigo(codigo: number): { icono: NombreIcono; texto: string } {
   if (codigo === 0) return { icono: "sol", texto: "Despejado" };
   if ([1, 2].includes(codigo)) return { icono: "sol", texto: "Parcialmente nublado" };
@@ -149,12 +156,12 @@ export default async function PaginaInicio() {
         )}
 
         {contactosEmergencia && contactosEmergencia.length > 0 && (
-          <div className="flex flex-col gap-2 rounded-2xl border border-rojo-semaforo/40 bg-rojo-semaforo/10 p-4">
+          <div className="flex flex-col gap-3 rounded-2xl border border-rojo-semaforo/40 bg-rojo-semaforo/10 p-4">
             <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-rojo-semaforo">
               <Icono nombre="alerta" className="h-4 w-4" />
               Emergencias
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {contactosEmergencia.map((c: any) => {
                 const zona = c.cargo?.includes("Carelmapu") ? " (Carelmapu)" : "";
                 const etiqueta = `${c.nombre.split(" / ")[0]}${zona}`;
@@ -162,9 +169,13 @@ export default async function PaginaInicio() {
                   <a
                     key={`${c.nombre}-${c.cargo}`}
                     href={`tel:${c.telefono.replace(/[^0-9+]/g, "")}`}
-                    className="flex-1 rounded-full bg-rojo-semaforo px-3 py-2 text-center text-sm font-medium text-arena-100 transition hover:opacity-90"
+                    className="flex flex-col items-center gap-1.5 rounded-2xl bg-white p-3 text-center shadow-sm transition hover:bg-rojo-semaforo/5"
                   >
-                    {etiqueta} · {c.telefono}
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rojo-semaforo/15 text-rojo-semaforo">
+                      <Icono nombre={iconoContacto(c.nombre)} className="h-5 w-5" />
+                    </span>
+                    <span className="text-xs font-medium text-bosque-900">{etiqueta}</span>
+                    <span className="text-sm font-semibold text-rojo-semaforo">{c.telefono}</span>
                   </a>
                 );
               })}

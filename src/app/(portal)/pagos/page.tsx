@@ -80,17 +80,20 @@ export default async function PaginaPagos() {
 
       {filas.length > 0 && (
         <div>
-          <p className="mb-2 text-xs uppercase tracking-wide text-bosque-500">
-            Datos para transferencia
-          </p>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-xs uppercase tracking-wide text-bosque-500">
+              Datos para transferencia
+            </p>
+            <BotonCopiar
+              valor={filas.map((f) => `${f.etiqueta}: ${f.valor}`).join("\n")}
+              etiqueta="Copiar todo"
+            />
+          </div>
           <div className="tarjeta flex flex-col divide-y divide-arena-300 p-4">
             {filas.map((f) => (
-              <div key={f.etiqueta} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
-                <div>
-                  <p className="text-xs text-bosque-500">{f.etiqueta}</p>
-                  <p className="text-sm font-medium text-bosque-900">{f.valor}</p>
-                </div>
-                <BotonCopiar valor={f.valor!} />
+              <div key={f.etiqueta} className="py-2.5 first:pt-0 last:pb-0">
+                <p className="text-xs text-bosque-500">{f.etiqueta}</p>
+                <p className="text-sm font-medium text-bosque-900">{f.valor}</p>
               </div>
             ))}
           </div>

@@ -109,6 +109,14 @@ export default async function PaginaInicio() {
   const primeraParcela = vinculos?.[0]?.parcelas as any;
   const nombre = perfil?.nombre ?? "";
 
+  const hoyFormateado = new Intl.DateTimeFormat("es-CL", {
+    timeZone: "America/Santiago",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date());
+  const hoyCapitalizado = hoyFormateado.charAt(0).toUpperCase() + hoyFormateado.slice(1);
+
   const varianteEstado =
     estadoGeneral.nivel === "rojo" ? "rojo" : estadoGeneral.nivel === "amarillo" ? "amarillo" : "claro";
   const iconoEstado = estadoGeneral.nivel === "verde" || !estadoGeneral.nivel ? "check" : "alerta";
@@ -195,6 +203,7 @@ export default async function PaginaInicio() {
             icono={clima?.icono ?? "nublado"}
             variante="oscuro"
           >
+            <p className="mt-0.5 text-[11px] text-bosque-300">{hoyCapitalizado}</p>
             {clima?.dias && clima.dias.length > 0 && (
               <div className="mt-1 flex gap-1.5">
                 {clima.dias.map((d, i) => {

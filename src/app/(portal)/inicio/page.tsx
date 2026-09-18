@@ -73,8 +73,9 @@ export default async function PaginaInicio() {
       supabase.from("avisos").select("titulo, texto").order("fecha", { ascending: false }).limit(1).maybeSingle(),
       supabase
         .from("contactos_utiles")
-        .select("nombre, telefono")
-        .in("nombre", ["Bomberos", "Carabineros", "SAMU / Ambulancia"]),
+        .select("nombre, cargo, telefono")
+        .in("nombre", ["Bomberos", "Carabineros", "SAMU / Ambulancia"])
+        .order("nombre"),
       obtenerClima(),
     ]);
 
@@ -154,15 +155,19 @@ export default async function PaginaInicio() {
               Emergencias
             </p>
             <div className="flex flex-wrap gap-2">
-              {contactosEmergencia.map((c: any) => (
-                <a
-                  key={c.nombre}
-                  href={`tel:${c.telefono}`}
-                  className="flex-1 rounded-full bg-rojo-semaforo px-3 py-2 text-center text-sm font-medium text-arena-100 transition hover:opacity-90"
-                >
-                  {c.nombre.split(" / ")[0]} · {c.telefono}
-                </a>
-              ))}
+              {contactosEmergencia.map((c: any) => {
+                const zona = c.cargo?.includes("Carelmapu") ? " (Carelmapu)" : "";
+                const etiqueta = `${c.nombre.split(" / ")[0]}${zona}`;
+                return (
+                  <a
+                    key={`${c.nombre}-${c.cargo}`}
+                    href={`tel:${c.telefono.replace(/[^0-9+]/g, "")}`}
+                    className="flex-1 rounded-full bg-rojo-semaforo px-3 py-2 text-center text-sm font-medium text-arena-100 transition hover:opacity-90"
+                  >
+                    {etiqueta} · {c.telefono}
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}

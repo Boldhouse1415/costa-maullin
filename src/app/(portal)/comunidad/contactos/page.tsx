@@ -34,10 +34,10 @@ export default async function PaginaContactos() {
               <div className="mt-2 flex flex-wrap gap-2">
                 {c.telefono && (
                   <a
-                    href={`tel:${c.telefono}`}
+                    href={`tel:${c.telefono.replace(/[^0-9+]/g, "")}`}
                     className="rounded-full bg-bosque-500 px-3 py-1.5 text-xs font-medium text-arena-100 transition hover:bg-bosque-900"
                   >
-                    Llamar
+                    Llamar · {c.telefono}
                   </a>
                 )}
                 {c.whatsapp && (

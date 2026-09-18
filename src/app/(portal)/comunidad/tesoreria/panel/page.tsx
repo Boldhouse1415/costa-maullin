@@ -141,7 +141,7 @@ export default async function PaginaPanelTesoreria() {
           variante={porCobrar > 0 ? "amarillo" : "claro"}
         />
         <TarjetaResumen titulo="Ingresos" valor={formatoCLP(ingresos)} icono="check" variante="claro" />
-        <TarjetaResumen titulo="Egresos" valor={formatoCLP(egresos)} icono="pagos" variante="claro" />
+        <TarjetaResumen titulo="Egresos" valor={formatoCLP(egresos)} icono="pagos" variante="rojo" />
       </div>
 
       <div>

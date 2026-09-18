@@ -82,9 +82,18 @@ export default async function PaginaDetalleParcela({
 
           return (
             <div key={v.usuario_id} className="tarjeta mb-2 flex items-center gap-3 p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-bosque-300 text-lg font-medium text-bosque-900">
-                {nombreCompleto[0] ?? "?"}
-              </div>
+              {v.foto_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={v.foto_url}
+                  alt=""
+                  className="h-12 w-12 shrink-0 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-bosque-300 text-lg font-medium text-bosque-900">
+                  {nombreCompleto[0] ?? "?"}
+                </div>
+              )}
               <div className="flex-1">
                 <p className="font-medium text-bosque-900">{nombreCompleto}</p>
                 {mostrarWhatsapp && (

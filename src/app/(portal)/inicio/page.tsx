@@ -99,14 +99,24 @@ export default async function PaginaInicio() {
             "linear-gradient(180deg, rgba(22,38,31,0.15) 0%, rgba(22,38,31,0.9) 100%), url(/costa-maullin-referencial.jpg)",
         }}
       >
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-arena-200">Costa Maullín</p>
-          <h1 className="text-2xl font-semibold text-arena-100">
-            Hola{nombre ? `, ${nombre}` : ""}
-          </h1>
-          {primeraParcela && (
-            <p className="text-sm text-arena-200">Parcela {primeraParcela.numero}</p>
-          )}
+        <div className="flex items-center gap-3">
+          {perfil?.foto_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={perfil.foto_url}
+              alt=""
+              className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-arena-100/70"
+            />
+          ) : null}
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-arena-200">Costa Maullín</p>
+            <h1 className="text-2xl font-semibold text-arena-100">
+              Hola{nombre ? `, ${nombre}` : ""}
+            </h1>
+            {primeraParcela && (
+              <p className="text-sm text-arena-200">Parcela {primeraParcela.numero}</p>
+            )}
+          </div>
         </div>
       </div>
 

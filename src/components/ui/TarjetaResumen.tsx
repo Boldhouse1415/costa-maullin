@@ -55,12 +55,14 @@ export function TarjetaResumen({
   detalle,
   icono,
   variante = "neutro",
+  children,
 }: {
   titulo: string;
   valor: string;
   detalle?: string;
   icono?: NombreIcono;
   variante?: Variante;
+  children?: React.ReactNode;
 }) {
   const e = ESTILOS[variante];
   const esOscuro = variante === "oscuro";
@@ -89,6 +91,7 @@ export function TarjetaResumen({
       </div>
 
       {detalle && <p className={`text-xs ${e.detalle}`}>{detalle}</p>}
+      {children}
     </div>
   );
 }

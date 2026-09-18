@@ -1,5 +1,7 @@
 import { crearClienteServidor } from "@/lib/supabase/server";
+import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 import { TarjetaResumen } from "@/components/ui/TarjetaResumen";
+import { FormularioEstadoGeneral } from "@/components/ui/FormularioEstadoGeneral";
 import { Icono, type NombreIcono } from "@/components/ui/Icono";
 
 // Coordenadas de Maullín, Chile.
@@ -44,6 +46,9 @@ async function obtenerClima() {
 }
 
 export default async function PaginaInicio() {
+  const usuario = await obtenerUsuarioActual();
+  const puedeEditarEstado = tienePermiso(usuario, "comunidad.estado_general");
+
   const supabase = await crearClienteServidor();
 
   const {
@@ -166,10 +171,21 @@ export default async function PaginaInicio() {
           <TarjetaResumen
             titulo="Estado Costa Maullín"
             valor={estadoGeneral.titulo}
-            detalle="Sin alertas activas."
+            detalle={
+              estadoGeneral.nivel === "verde" || !estadoGeneral.nivel
+                ? "Sin alertas activas."
+                : "Mantente atento a las novedades."
+            }
             icono={iconoEstado}
             variante={varianteEstado}
-          />
+          >
+            {puedeEditarEstado && (
+              <FormularioEstadoGeneral
+                nivelActual={estadoGeneral.nivel ?? "verde"}
+                tituloActual={estadoGeneral.titulo}
+              />
+            )}
+          </TarjetaResumen>
         </div>
 
         <TarjetaResumen

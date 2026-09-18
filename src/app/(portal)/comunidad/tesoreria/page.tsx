@@ -3,6 +3,7 @@ import { crearClienteServidor } from "@/lib/supabase/server";
 import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 import { FormularioGasto } from "@/components/ui/FormularioGasto";
 import { FormularioSaldoCaja } from "@/components/ui/FormularioSaldoCaja";
+import { GestionGasto } from "@/components/ui/GestionGasto";
 import { Icono } from "@/components/ui/Icono";
 
 const CATEGORIA_LABEL: Record<string, string> = {
@@ -100,29 +101,32 @@ export default async function PaginaTesoreria() {
       {gastos && gastos.length > 0 ? (
         <div className="flex flex-col gap-2">
           {gastos.map((g: any) => (
-            <div key={g.id} className="tarjeta flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className="font-medium text-bosque-900">{g.descripcion}</p>
-                <p className="text-xs text-bosque-500">
-                  {CATEGORIA_LABEL[g.categoria] ?? g.categoria} ·{" "}
-                  {new Date(g.fecha).toLocaleDateString("es-CL", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </p>
-                {g.comprobante_url && (
-                  <a
-                    href={g.comprobante_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 inline-flex items-center rounded-full bg-bosque-500 px-3 py-1 text-xs font-medium text-arena-100 transition hover:bg-bosque-900"
-                  >
-                    Ver respaldo
-                  </a>
-                )}
+            <div key={g.id} className="tarjeta flex flex-col gap-2 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-medium text-bosque-900">{g.descripcion}</p>
+                  <p className="text-xs text-bosque-500">
+                    {CATEGORIA_LABEL[g.categoria] ?? g.categoria} ·{" "}
+                    {new Date(g.fecha).toLocaleDateString("es-CL", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+                  {g.comprobante_url && (
+                    <a
+                      href={g.comprobante_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center rounded-full bg-bosque-500 px-3 py-1 text-xs font-medium text-arena-100 transition hover:bg-bosque-900"
+                    >
+                      Ver respaldo
+                    </a>
+                  )}
+                </div>
+                <p className="shrink-0 font-medium text-bosque-900">{formatoCLP(g.monto)}</p>
               </div>
-              <p className="shrink-0 font-medium text-bosque-900">{formatoCLP(g.monto)}</p>
+              {puedeRegistrarGasto && <GestionGasto gasto={g} />}
             </div>
           ))}
         </div>

@@ -129,7 +129,7 @@ export default async function PaginaInicio() {
         <img
           src="/logo-costa-maullin-blanco.png"
           alt="Costa Maullín"
-          className="absolute left-5 top-4 h-8 w-auto sm:hidden"
+          className="absolute left-5 top-4 h-32 w-auto sm:hidden"
         />
         <div className="flex items-center gap-3">
           {perfil?.foto_url ? (

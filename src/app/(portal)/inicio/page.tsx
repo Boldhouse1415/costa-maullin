@@ -125,6 +125,12 @@ export default async function PaginaInicio() {
             "linear-gradient(180deg, rgba(22,38,31,0.15) 0%, rgba(22,38,31,0.9) 100%), url(/costa-maullin-referencial.jpg)",
         }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo-costa-maullin-blanco.png"
+          alt="Costa Maullín"
+          className="absolute left-5 top-4 h-8 w-auto sm:hidden"
+        />
         <div className="flex items-center gap-3">
           {perfil?.foto_url ? (
             // eslint-disable-next-line @next/next/no-img-element

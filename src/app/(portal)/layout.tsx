@@ -15,7 +15,7 @@ const destinos = [
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-arena-100">
-      <header className="border-b border-arena-300 bg-white/80 backdrop-blur">
+      <header className="hidden border-b border-arena-300 bg-white/80 backdrop-blur sm:block">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link href="/inicio" className="flex shrink-0 items-center">
             <Image

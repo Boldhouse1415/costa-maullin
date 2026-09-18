@@ -31,7 +31,7 @@ function climaDesdeCodigo(codigo: number): { icono: NombreIcono; texto: string }
 async function obtenerClima() {
   try {
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&timezone=America%2FSantiago`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max&forecast_days=3&timezone=America%2FSantiago`,
       { next: { revalidate: 1800 } },
     );
     if (!res.ok) return null;
@@ -39,7 +39,17 @@ async function obtenerClima() {
     const temp = data?.current?.temperature_2m;
     const codigo = data?.current?.weather_code;
     if (typeof temp !== "number" || typeof codigo !== "number") return null;
-    return { temp: Math.round(temp), ...climaDesdeCodigo(codigo) };
+
+    const fechas: string[] = data?.daily?.time ?? [];
+    const codigosDiarios: number[] = data?.daily?.weather_code ?? [];
+    const maximas: number[] = data?.daily?.temperature_2m_max ?? [];
+    const dias = fechas.map((fecha, i) => ({
+      fecha,
+      temp: Math.round(maximas[i]),
+      ...climaDesdeCodigo(codigosDiarios[i]),
+    }));
+
+    return { temp: Math.round(temp), ...climaDesdeCodigo(codigo), dias };
   } catch {
     return null;
   }
@@ -184,7 +194,38 @@ export default async function PaginaInicio() {
             detalle={clima ? clima.texto : "No disponible"}
             icono={clima?.icono ?? "nublado"}
             variante="oscuro"
-          />
+          >
+            {clima?.dias && clima.dias.length > 0 && (
+              <div className="mt-1 flex gap-1.5">
+                {clima.dias.map((d, i) => {
+                  const esHoy = i === 0;
+                  const etiqueta = esHoy
+                    ? "Hoy"
+                    : new Date(`${d.fecha}T00:00:00`).toLocaleDateString("es-CL", {
+                        weekday: "short",
+                      });
+                  return (
+                    <div
+                      key={d.fecha}
+                      className={`flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 ${
+                        esHoy ? "bg-arena-100/15 ring-1 ring-arena-100/40" : ""
+                      }`}
+                    >
+                      <span
+                        className={`text-[10px] font-medium capitalize ${
+                          esHoy ? "text-arena-100" : "text-bosque-300"
+                        }`}
+                      >
+                        {etiqueta}
+                      </span>
+                      <Icono nombre={d.icono} className="h-4 w-4 text-arena-100" />
+                      <span className="text-xs font-semibold text-arena-100">{d.temp}°</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </TarjetaResumen>
           <TarjetaResumen
             titulo="Estado Costa Maullín"
             valor={estadoGeneral.titulo}

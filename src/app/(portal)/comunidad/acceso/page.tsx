@@ -90,26 +90,15 @@ export default async function PaginaAcceso() {
           <p className="mb-2 text-xs uppercase tracking-wide text-bosque-500">Ubicación</p>
           <div className="tarjeta flex flex-col gap-3 p-4">
             <p className="text-sm text-bosque-700">{direccion}</p>
-            <div className="flex gap-2">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-bosque-700 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
-              >
-                <Icono nombre="mapa" className="h-4 w-4" />
-                Google Maps
-              </a>
-              <a
-                href={`https://waze.com/ul?q=${encodeURIComponent(direccion)}&navigate=yes`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-bosque-500 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
-              >
-                <Icono nombre="mapa" className="h-4 w-4" />
-                Waze
-              </a>
-            </div>
+            <a
+              href={`https://waze.com/ul?q=${encodeURIComponent(direccion)}&navigate=yes`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 rounded-full bg-bosque-700 py-2.5 text-sm font-medium text-arena-100 transition hover:bg-bosque-900"
+            >
+              <Icono nombre="mapa" className="h-4 w-4" />
+              Cómo llegar con Waze
+            </a>
           </div>
         </div>
       )}

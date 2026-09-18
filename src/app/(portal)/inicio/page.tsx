@@ -125,13 +125,24 @@ export default async function PaginaInicio() {
             "linear-gradient(180deg, rgba(22,38,31,0.15) 0%, rgba(22,38,31,0.9) 100%), url(/costa-maullin-referencial.jpg)",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/logo-costa-maullin-blanco.png"
-          alt="Costa Maullín"
-          className="absolute left-5 top-4 h-32 w-auto sm:hidden"
-        />
-        <div className="flex items-center gap-3">
+        {/* Mobile: logo centrado y saludo simple */}
+        <div className="mx-auto flex flex-col items-center gap-1 text-center sm:hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-costa-maullin-blanco.png"
+            alt="Costa Maullín"
+            className="h-[5.6rem] w-auto"
+          />
+          <h1 className="text-2xl font-semibold text-arena-100">
+            Hola{nombre ? `, ${nombre}` : ""}
+          </h1>
+          {primeraParcela && (
+            <p className="text-sm text-arena-200">Parcela {primeraParcela.numero}</p>
+          )}
+        </div>
+
+        {/* Escritorio: layout original sin cambios */}
+        <div className="hidden items-center gap-3 sm:flex">
           {perfil?.foto_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img

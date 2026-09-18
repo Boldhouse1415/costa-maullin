@@ -2,6 +2,7 @@ import { crearClienteServidor } from "@/lib/supabase/server";
 import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 import { Icono } from "@/components/ui/Icono";
 import { FormularioNoticia } from "@/components/ui/FormularioNoticia";
+import { GestionNoticia } from "@/components/ui/GestionNoticia";
 
 export default async function PaginaNoticias() {
   const usuario = await obtenerUsuarioActual();
@@ -52,6 +53,11 @@ export default async function PaginaNoticias() {
                   year: "numeric",
                 })}
               </p>
+              {puedePublicar && (
+                <div className="mt-1">
+                  <GestionNoticia aviso={a} />
+                </div>
+              )}
             </div>
           ))}
         </div>

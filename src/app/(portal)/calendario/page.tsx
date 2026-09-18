@@ -2,6 +2,7 @@ import { crearClienteServidor } from "@/lib/supabase/server";
 import { obtenerUsuarioActual, tienePermiso } from "@/lib/rbac/permisos";
 import { Icono } from "@/components/ui/Icono";
 import { FormularioEvento } from "@/components/ui/FormularioEvento";
+import { GestionEvento } from "@/components/ui/GestionEvento";
 
 export default async function PaginaCalendario() {
   const usuario = await obtenerUsuarioActual();
@@ -14,7 +15,7 @@ export default async function PaginaCalendario() {
   const [{ data: proximos }, { data: pasados }, categoriasData] = await Promise.all([
     supabase
       .from("eventos")
-      .select("id, titulo, descripcion, fecha, hora, lugar, categorias_evento(nombre)")
+      .select("id, titulo, descripcion, fecha, hora, lugar, categoria_id, categorias_evento(nombre)")
       .gte("fecha", hoy)
       .order("fecha", { ascending: true }),
     supabase
@@ -65,6 +66,22 @@ export default async function PaginaCalendario() {
                 {ev.lugar ? ` · ${ev.lugar}` : ""}
               </p>
               {ev.descripcion && <p className="text-sm text-bosque-500">{ev.descripcion}</p>}
+              {puedeGestionar && (
+                <div className="mt-1">
+                  <GestionEvento
+                    evento={{
+                      id: ev.id,
+                      titulo: ev.titulo,
+                      descripcion: ev.descripcion,
+                      fecha: ev.fecha,
+                      hora: ev.hora,
+                      lugar: ev.lugar,
+                      categoria_id: (ev as any).categoria_id ?? null,
+                    }}
+                    categorias={categorias ?? []}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
